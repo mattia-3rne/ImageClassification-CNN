@@ -216,8 +216,8 @@ print(f"Accuracy on the test set: {accuracy:.4f}")
 
 
 
-## Define a function to display sample images with predictions and actual labels
-def display_sample_images(images, predictions, actual_labels, num_images=25):
+# Define a function to display sample images with predictions and actual labels
+def display_sample_images(images, predictions, actual_labels, class_names, num_images=25):
     num_cols = 5  # Number of columns in the grid
     num_rows = (num_images + num_cols - 1) // num_cols  # Number of rows in the grid
 
@@ -229,12 +229,13 @@ def display_sample_images(images, predictions, actual_labels, num_images=25):
         image = np.squeeze(images[i])
         plt.imshow(image, cmap='gray')  # Display the image
         # Display both predicted and actual labels
-        plt.title(f"Predicted: {predictions[i]}\nActual: {actual_labels[i]}")
+        predicted_label = predictions[i]
+        actual_label = actual_labels[i]
+        plt.title(f"Predicted: {class_names[predicted_label]} ({predicted_label})\nActual: {class_names[actual_label]} ({actual_label})")
         plt.axis('off')
 
     plt.tight_layout()
     plt.show()
-
 
 # Select a random sample of 25 images and their corresponding predictions and actual labels
 num_images_to_display = 25
@@ -243,5 +244,9 @@ sample_images = [test_x[i] for i in indices]
 sample_predictions = [predictions[i] for i in indices]
 sample_actual_labels = [test_y[i] for i in indices]
 
+# Assuming you have a list of class names like this
+class_names = ['T-shirt/top', 'Trouser', 'Pullover', 'Dress', 'Coat',
+               'Sandal', 'Shirt', 'Sneaker', 'Bag', 'Ankle boot']
+
 # Display the sample of images with predictions and actual labels
-display_sample_images(sample_images, sample_predictions, sample_actual_labels, num_images_to_display)
+display_sample_images(sample_images, sample_predictions, sample_actual_labels, class_names, num_images_to_display)
