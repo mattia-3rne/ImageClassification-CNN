@@ -152,47 +152,6 @@ def train(epoch):
         # printing the validation loss
     print('Epoch : ',epoch+1, '\t', 'loss :', loss_val)
 
-# defining the number of epochs
-n_epochs = 25
-# empty list to store training losses
-train_losses = []
-# empty list to store validation losses
-val_losses = []
-# training the model
-for epoch in range(n_epochs):
-    train(epoch)
-
-# plotting the training and validation loss
-plt.plot([loss.detach().numpy() for loss in train_losses], label='Training loss')
-plt.plot([loss.detach().numpy() for loss in val_losses], label='Validation loss')
-plt.legend()
-plt.show()
-
-# Predictions for the training set
-with torch.no_grad():
-    train_x = train_x.float()
-    output = model(train_x)
-
-softmax = torch.exp(output).cpu()
-prob = list(softmax.numpy())
-predictions = np.argmax(prob, axis=1)
-
-# Accuracy on the training set
-training_accuracy = accuracy_score(train_y, predictions)
-print(f"Accuracy on training set: {training_accuracy:.4f}")
-
-# Predictions for the validation set
-with torch.no_grad():
-    val_x = val_x.float()
-    output = model(val_x)
-
-softmax = torch.exp(output).cpu()
-prob = list(softmax.numpy())
-predictions = np.argmax(prob, axis=1)
-
-# Accuracy on the validation set
-validation_accuracy = accuracy_score(val_y, predictions)
-print(f"Accuracy on validation set: {validation_accuracy:.4f}")
 
 #Reshaping and Conversion
 test_x = testX.reshape(10000, 1, 28, 28)
@@ -210,8 +169,118 @@ predictions = np.argmax(prob, axis=1)
 test_y = testY.astype(int);
 test_y = torch.from_numpy(test_y)
 
-accuracy = accuracy_score(test_y, predictions)
-print(f"Accuracy on the test set: {accuracy:.4f}")
+
+# defining the number of epochs
+n_epochs = 25
+# empty list to store training losses
+train_losses = []
+# empty list to store validation losses
+val_losses = []
+
+
+# Empty lists to store training, validation, and test accuracies
+train_accuracies = []
+val_accuracies = []
+test_accuracies = []
+
+# Training the model
+for epoch in range(n_epochs):
+    train(epoch)
+    
+    # Predictions for the training set
+    with torch.no_grad():
+        train_x = train_x.float()
+        output = model(train_x)
+    softmax = torch.exp(output).cpu()
+    prob = list(softmax.numpy())
+    predictions = np.argmax(prob, axis=1)
+    # Accuracy on the training set
+    training_accuracy = accuracy_score(train_y, predictions)
+    train_accuracies.append(training_accuracy)
+
+    # Predictions for the validation set
+    with torch.no_grad():
+        val_x = val_x.float()
+        output = model(val_x)
+    softmax = torch.exp(output).cpu()
+    prob = list(softmax.numpy())
+    predictions = np.argmax(prob, axis=1)
+    # Accuracy on the validation set
+    validation_accuracy = accuracy_score(val_y, predictions)
+    val_accuracies.append(validation_accuracy)
+
+    # Predictions for the test set
+    with torch.no_grad():
+        test_x = test_x.float()
+        output = model(test_x)
+    softmax = torch.exp(output).cpu()
+    prob = list(softmax.numpy())
+    predictions = np.argmax(prob, axis=1)
+    # Accuracy on the test set
+    test_accuracy = accuracy_score(test_y, predictions)
+    test_accuracies.append(test_accuracy)
+
+# Convert accuracies to percentages
+train_accuracies_percent = [accuracy * 100 for accuracy in train_accuracies]
+val_accuracies_percent = [accuracy * 100 for accuracy in val_accuracies]
+test_accuracies_percent = [accuracy * 100 for accuracy in test_accuracies]
+
+# Plotting the accuracies
+plt.plot(range(1, n_epochs+1), train_accuracies_percent, label='Training Accuracy')
+plt.plot(range(1, n_epochs+1), val_accuracies_percent, label='Validation Accuracy')
+plt.plot(range(1, n_epochs+1), test_accuracies_percent, label='Test Accuracy')
+plt.xlabel('Epoch')
+plt.ylabel('Accuracy (%)')
+plt.title('Training, Validation, and Test Accuracies')
+plt.legend()
+plt.show()
+
+
+# Predictions for the training set
+with torch.no_grad():
+    train_x = train_x.float()
+    output = model(train_x)
+
+softmax = torch.exp(output).cpu()
+prob = list(softmax.numpy())
+predictions = np.argmax(prob, axis=1)
+
+# Accuracy on the training set
+training_accuracy = accuracy_score(train_y, predictions)
+training_accuracy_percent = training_accuracy * 100
+print(f"Accuracy on the training set: {training_accuracy_percent:.2f}%")
+
+# Predictions for the validation set
+with torch.no_grad():
+    val_x = val_x.float()
+    output = model(val_x)
+
+softmax = torch.exp(output).cpu()
+prob = list(softmax.numpy())
+predictions = np.argmax(prob, axis=1)
+
+# Accuracy on the validation set
+validation_accuracy = accuracy_score(val_y, predictions)
+validation_accuracy_percent = validation_accuracy * 100
+print(f"Accuracy on the validation set: {validation_accuracy_percent:.2f}%")
+
+
+# Predictions for the test set
+with torch.no_grad():
+    test_x = test_x.float()
+    output = model(test_x)
+
+softmax = torch.exp(output).cpu()
+prob = list(softmax.numpy())
+predictions = np.argmax(prob, axis=1)
+
+test_y = testY.astype(int)
+test_y_tensor = torch.from_numpy(test_y)
+
+# Accuracy on the test set
+test_accuracy = accuracy_score(test_y_tensor, predictions)
+test_accuracy_percent = test_accuracy * 100
+print(f"Accuracy on the test set: {test_accuracy_percent:.2f}%")
 
 
 
