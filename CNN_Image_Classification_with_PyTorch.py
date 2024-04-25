@@ -248,7 +248,7 @@ predictions = np.argmax(prob, axis=1)
 # Accuracy on the training set
 training_accuracy = accuracy_score(train_y, predictions)
 training_accuracy_percent = training_accuracy * 100
-print(f"Accuracy on the training set: {training_accuracy_percent:.2f}%")
+print(f"Accuracy on the training set: {training_accuracy_percent:.2f}%") # Training Set is 90% of the data-set
 
 # Predictions for the validation set
 with torch.no_grad():
@@ -262,7 +262,7 @@ predictions = np.argmax(prob, axis=1)
 # Accuracy on the validation set
 validation_accuracy = accuracy_score(val_y, predictions)
 validation_accuracy_percent = validation_accuracy * 100
-print(f"Accuracy on the validation set: {validation_accuracy_percent:.2f}%")
+print(f"Accuracy on the validation set: {validation_accuracy_percent:.2f}%") # Validation Set is the remaining 10% of the data-set
 
 
 # Predictions for the test set
@@ -280,7 +280,7 @@ test_y_tensor = torch.from_numpy(test_y)
 # Accuracy on the test set
 test_accuracy = accuracy_score(test_y_tensor, predictions)
 test_accuracy_percent = test_accuracy * 100
-print(f"Accuracy on the test set: {test_accuracy_percent:.2f}%")
+print(f"Accuracy on the test set: {test_accuracy_percent:.2f}%") # Test Set is the whole 100% of the data-set
 
 
 
