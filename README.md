@@ -1,1 +1,3 @@
 Simple Image Classification with a CNN that succesfully classifies different categories of clothes.
+
+This fork and the main code BOTH have NO LICENSE, because I was unable to reach the orignial owner to ask for permission...
